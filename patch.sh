@@ -423,7 +423,7 @@ backports () {
 drivers () {
 	dir 'boris'
 	###FIXME: this driver needs to be rewritten to use gpiolib directly, instead of hacking and reverting gpiolib changes to make it steal access
-	#dir 'drivers/ti/gpio'
+	dir 'drivers/ti/gpio'
 }
 
 ###
