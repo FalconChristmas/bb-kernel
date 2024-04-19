@@ -1,0 +1,32 @@
+From 179443f110582135da8976001d5d42e48902e977 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Wed, 7 Feb 2024 15:34:54 -0500
+Subject: [PATCH] Add CapeUniversal dtb's to Makefile
+
+---
+ arch/arm/boot/dts/ti/omap/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/ti/omap/Makefile b/arch/arm/boot/dts/ti/omap/Makefile
+index 6d817e15e3c6..700d0c18df0b 100644
+--- a/arch/arm/boot/dts/ti/omap/Makefile
++++ b/arch/arm/boot/dts/ti/omap/Makefile
+@@ -93,6 +93,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
+ 	am335x-bone.dtb \
+ 	am335x-boneblack.dtb \
+ 	am335x-boneblack-uboot.dtb \
++	am335x-boneblack-uboot-univ.dtb \
+ 	BONE-ADC.dtbo \
+ 	BBORG_FAN-A000.dtbo \
+ 	BBORG_COMMS-00A2.dtbo \
+@@ -127,6 +128,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
+ 	am335x-pocketbeagle.dtb \
+ 	am335x-regor-rdk.dtb \
+ 	am335x-sancloud-bbe.dtb \
++	am335x-sancloud-bbe-uboot-univ.dtb \
+ 	am335x-sancloud-bbe-lite.dtb \
+ 	am335x-sancloud-bbe-extended-wifi.dtb \
+ 	am335x-shc.dtb \
+-- 
+2.39.2
+

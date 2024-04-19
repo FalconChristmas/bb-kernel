@@ -1,0 +1,28 @@
+From a74e2ec68c9fd8d330a10345171e36594199e4b2 Mon Sep 17 00:00:00 2001
+From: Daniel Kulp <dan@kulp.com>
+Date: Mon, 23 Sep 2024 10:14:19 -0400
+Subject: [PATCH] hack: gpiolib: yes we have drivers stomping on each other, we
+ need to find a better way to share gpio...
+
+---
+ drivers/gpio/gpiolib.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 3a9668cc100d..0526468eed57 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -2257,8 +2257,8 @@ static int gpiod_request_commit(struct gpio_desc *desc, const char *label)
+ 	if (!guard.gc)
+ 		return -ENODEV;
+ 
+-	if (test_and_set_bit(FLAG_REQUESTED, &desc->flags))
+-		return -EBUSY;
++	if (test_and_set_bit(FLAG_REQUESTED, &desc->flags)) {}
++		//return -EBUSY;
+ 
+ 	/* NOTE:  gpio_request() can be called in early boot,
+ 	 * before IRQs are enabled, for non-sleeping (SOC) GPIOs.
+-- 
+2.39.2
+
