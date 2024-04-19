@@ -500,6 +500,7 @@ backports () {
 drivers () {
 	dir 'boris'
 	dir 'mmc'
+	dir 'drivers/ti/gpio'
 }
 
 ###
