@@ -524,6 +524,8 @@ drivers () {
 	dir 'drivers/it66122'
 
 	dir 'external/ti-amx3-cm3-pm-firmware'
+	#dir 'drivers/mmc'
+	dir 'drivers/ti/gpio'
 }
 
 ###

@@ -4,7 +4,7 @@ ARCH=$(uname -m)
 
 config="omap2plus_defconfig"
 
-build_prefix="-bone"
+build_prefix="-fpp"
 branch_prefix="am33x-v"
 branch_postfix=""
 
@@ -19,10 +19,10 @@ DEBARCH=armhf
 #toolchain="gcc_9_arm"
 #toolchain="gcc_10_arm"
 #toolchain="gcc_11_arm"
-#toolchain="gcc_12_arm"
+toolchain="gcc_12_arm"
 #toolchain="gcc_13_arm"
 #toolchain="gcc_14_arm"
-toolchain="gcc_15_arm"
+#toolchain="gcc_15_arm"
 #arm64
 #KERNEL_ARCH=arm64
 #DEBARCH=arm64
@@ -64,5 +64,5 @@ BUILD=${build_prefix}14
 #git branch
 BRANCH="${branch_prefix}${KERNEL_REL}${branch_postfix}"
 
-DISTRO=xross
+#DISTRO=xross
 #

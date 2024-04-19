@@ -83,11 +83,12 @@ make_deb () {
 	#https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/scripts/package/builddeb?id=3716001bcb7f5822382ac1f2f54226b87312cc6b
 	build_opts="${build_opts} KDEB_SOURCENAME=linux-upstream"
 	build_opts="${build_opts} KDEB_COMPRESS=xz"
-	build_opts="${build_opts} DEB_BUILD_PROFILES=pkg.linux-upstream.nokernelheaders"
+	build_opts="${build_opts} DEB_BUILD_PROFILES=pkg.linux-upstream"
 
 	echo "-----------------------------"
 	echo "make ${build_opts} CROSS_COMPILE="${CC}" bindeb-pkg"
 	echo "-----------------------------"
+	echo "make ${build_opts} CROSS_COMPILE=\"${CC}\" bindeb-pkg "
 	make ${build_opts} CROSS_COMPILE="${CC}" bindeb-pkg
 
 	mv "${DIR}"/*.buildinfo "${DIR}/deploy/" || true
@@ -131,7 +132,7 @@ fi
 echo "CROSS_COMPILE=${CC}"
 if [ -f /usr/bin/ccache ] ; then
 	echo "ccache [enabled]"
-	CC="ccache ${CC}"
+#	CC="ccache ${CC}"
 fi
 
 . "${DIR}/version.sh"
