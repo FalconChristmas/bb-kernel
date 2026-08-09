@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000001 Mon Sep 17 00:00:00 2001
+From: Daniel Kulp <dan@kulp.com>
+Date: Wed, 25 Jun 2026 12:00:00 -0400
+Subject: [PATCH] FPP: disable cape_eeprom0-3 on BBB to avoid boot probe delay
+
+FPP's U-Boot base overlay (fpp-base-overlay) used to disable cape_eeprom0-3
+via phandle fixups so the kernel would not spend 3-5s probing the cape
+auto-detect EEPROMs that FPP capes never populate.
+
+Those labels only exist on BBB-family device trees (am335x-bone-common.dtsi).
+PocketBeagle (PB1/K8-PB) includes am335x-osd335x-common.dtsi instead and has
+no cape EEPROMs, so a U-Boot overlay that references &cape_eeprom0-3 fails to
+resolve against PocketBeagle's __symbols__ and crashes U-Boot before the
+kernel loads. The overlay therefore no longer references those labels.
+
+Disable the nodes directly in the BBB base device tree instead. This keeps
+the boot-delay fix for BBB while letting a single, symbol-portable overlay
+boot on both BBB and PocketBeagle. PocketBeagle does not include this file,
+so it is unaffected.
+
+Signed-off-by: Daniel Kulp <dan@kulp.com>
+---
+ .../boot/dts/ti/omap/am335x-bone-common.dtsi  | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm/boot/dts/ti/omap/am335x-bone-common.dtsi b/arch/arm/boot/dts/ti/omap/am335x-bone-common.dtsi
+index 1111111111111..2222222222222 100644
+--- a/arch/arm/boot/dts/ti/omap/am335x-bone-common.dtsi
++++ b/arch/arm/boot/dts/ti/omap/am335x-bone-common.dtsi
+@@ -440,4 +440,18 @@ &tscadc {
+ 		ti,chan-step-opendelay = <0x98 0x98 0x98 0x98 0x98 0x98 0x98 0x98>;
+ 		ti,chan-step-sampledelay = <0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0>;
+ 	};
+ };
++
++/*
++ * FPP: disable the cape-detect EEPROMs. FPP capes do not populate the
++ * EEPROMs at 0x54-0x57, so leaving them enabled costs a 3-5s boot delay
++ * while the at24 driver probes and times out. Disabling them here (rather
++ * than in fpp-base-overlay) keeps the U-Boot overlay free of phandle
++ * references to labels that are absent on PocketBeagle, which lets the
++ * same overlay boot on both BBB and PocketBeagle. PocketBeagle does not
++ * include this file, so it is unaffected.
++ */
++&cape_eeprom0 { status = "disabled"; };
++&cape_eeprom1 { status = "disabled"; };
++&cape_eeprom2 { status = "disabled"; };
++&cape_eeprom3 { status = "disabled"; };
+--
+2.43.0

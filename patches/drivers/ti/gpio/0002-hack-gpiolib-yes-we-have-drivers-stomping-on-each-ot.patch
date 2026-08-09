@@ -1,0 +1,31 @@
+From 03591e3e8e65847404822c2e05e5b69eb4b8b1f3 Mon Sep 17 00:00:00 2001
+From: Daniel Kulp <dan@kulp.com>
+Date: Mon, 23 Sep 2024 10:14:19 -0400
+Subject: [PATCH 3/7] hack: gpiolib: yes we have drivers stomping on each
+ other, we need to find a better way to share gpio...
+
+---
+ drivers/gpio/gpiolib.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 drivers/gpio/gpiolib.c
+
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+old mode 100644
+new mode 100755
+index 113c5d90f2df..f43b550205d3
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -2437,8 +2437,8 @@ static int gpiod_request_commit(struct gpio_desc *desc, const char *label)
+ 	if (!guard.gc)
+ 		return -ENODEV;
+ 
+-	if (test_and_set_bit(GPIOD_FLAG_REQUESTED, &desc->flags))
+-		return -EBUSY;
++	if (test_and_set_bit(GPIOD_FLAG_REQUESTED, &desc->flags)) {}
++		// return -EBUSY;
+ 
+ 	offset = gpiod_hwgpio(desc);
+ 	if (!gpiochip_line_is_valid(guard.gc, offset)) {
+-- 
+2.43.0
+

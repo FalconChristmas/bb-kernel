@@ -9,7 +9,7 @@ ARCH=$(uname -m)
 
 config="omap2plus_defconfig"
 
-build_prefix="-bone"
+build_prefix="-fpp"
 branch_prefix="am33x-v"
 branch_postfix=""
 
@@ -73,5 +73,5 @@ BUILD=${build_prefix}15
 #git branch
 BRANCH="${branch_prefix}${KERNEL_REL}${branch_postfix}"
 
-DISTRO=xross
+#DISTRO=xross
 #

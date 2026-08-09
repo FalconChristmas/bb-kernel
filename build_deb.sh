@@ -67,7 +67,7 @@ make_deb () {
 	#https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/scripts/package/builddeb?id=3716001bcb7f5822382ac1f2f54226b87312cc6b
 	build_opts="${build_opts} KDEB_SOURCENAME=linux-upstream"
 	build_opts="${build_opts} KDEB_COMPRESS=xz"
-	build_opts="${build_opts} DEB_BUILD_PROFILES=pkg.linux-upstream.nokernelheaders"
+	build_opts="${build_opts} DEB_BUILD_PROFILES=pkg.linux-upstream"
 
 	echo "-----------------------------"
 	echo "make ${build_opts} CROSS_COMPILE="${CC}" bindeb-pkg"
@@ -113,9 +113,17 @@ fi
 /bin/sh -e "${DIR}/scripts/gcc.sh" || { exit 1 ; }
 . "${DIR}/.CC"
 echo "CROSS_COMPILE=${CC}"
-if [ -f /usr/bin/ccache ] ; then
-	echo "ccache: $(ccache --print-version)"
-	CC="ccache ${CC}"
+if [ -d /usr/lib/ccache ] ; then
+	# Use ccache via PATH, NOT CC="ccache ${CC}". On a native build CC is empty,
+	# so that yields CROSS_COMPILE="ccache " (trailing space) -- make strips the
+	# space when bindeb-pkg re-invokes itself to build the .deb, so
+	# ${CROSS_COMPILE}gcc becomes 'ccachegcc' (not found). PATH-based ccache
+	# survives the re-invocation because it is just the environment.
+	echo "ccache: $(ccache --print-version 2>/dev/null) [via PATH /usr/lib/ccache]"
+	export PATH="/usr/lib/ccache:${PATH}"
+	# Keep the cache on the host side (ignore/ is gitignored and bind-mounted),
+	# so it persists across rootfs re-extraction and speeds up rebuilds.
+	export CCACHE_DIR="${DIR}/ignore/ccache"
 fi
 
 . "${DIR}/version.sh"
